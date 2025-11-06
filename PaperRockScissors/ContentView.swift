@@ -15,10 +15,12 @@ struct ContentView: View {
     @State private var shouldWin = Bool.random()
     @State private var score = 0
     @State private var round = 1
+    @State private var isGameOver: Bool = false
+    @State private var finalScore: Int = 0
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.blue, .purple],
+            LinearGradient(colors: [.blue, .black],
                            startPoint: .top,
                            endPoint: .bottom)
             .ignoresSafeArea()
@@ -49,7 +51,7 @@ struct ContentView: View {
                 HStack(spacing: 30) {
                     ForEach(0..<3) { number in
                         Button {
-                            //             playerTapped(number)
+                            playerTapped(number)
                         } label: {
                             Text(moves[number])
                                 .font(.system(size: 50)).foregroundStyle(.white)
@@ -60,8 +62,40 @@ struct ContentView: View {
                 Spacer()
             }
             .padding()
+            .alert("Gema over!", isPresented: $isGameOver) {
+                VStack(alignment: .leading) {
+                    Text("Your final score is: \(finalScore)")
+                    Spacer()
+                }
+            }
         }
     }
+    func playerTapped(_ playerMove: Int) {
+            let winningMoves = [1, 2, 0] // which move beats each app move
+            var playerWasCorrect = false
+            
+            if shouldWin {
+                playerWasCorrect = playerMove == winningMoves[appMove]
+            } else {
+                playerWasCorrect = winningMoves[playerMove] == appMove
+            }
+            
+            if playerWasCorrect {
+                score += 1
+            }
+            
+            if round == 10 {
+                isGameOver = true
+                finalScore = score
+                round = 1
+                score = 0
+            } else {
+                round += 1
+            }
+            
+            appMove = Int.random(in: 0...2)
+            shouldWin.toggle()
+        }
 }
 #Preview {
     ContentView()
