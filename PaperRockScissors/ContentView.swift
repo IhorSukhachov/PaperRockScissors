@@ -20,8 +20,8 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.blue, .black],
-                           startPoint: .top,
+            LinearGradient(colors: [.blue, .yellow],
+                           startPoint: .center,
                            endPoint: .bottom)
             .ignoresSafeArea()
             
@@ -62,7 +62,7 @@ struct ContentView: View {
                 Spacer()
             }
             .padding()
-            .alert("Gema over!", isPresented: $isGameOver) {
+            .alert("Game over!", isPresented: $isGameOver) {
                 VStack(alignment: .leading) {
                     Text("Your final score is: \(finalScore)")
                     Spacer()
@@ -94,7 +94,7 @@ struct ContentView: View {
             }
             
             appMove = Int.random(in: 0...2)
-            shouldWin.toggle()
+            shouldWin = Bool.random()
         }
 }
 #Preview {
